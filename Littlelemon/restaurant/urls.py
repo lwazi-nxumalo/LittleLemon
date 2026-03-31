@@ -1,7 +1,9 @@
 #define URL route for index() view
 from django.urls import path
-from . import views
+from .views import MenuView , BookingView, index
 
 urlpatterns = [
-    path('', views.index, name='index')
+    path('', index, name='index'),
+    path('menu/', MenuView.as_view(), name='menu'),
+    path('bookings/', BookingView.as_view(), name='bookings')
 ]
