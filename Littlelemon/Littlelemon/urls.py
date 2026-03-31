@@ -21,8 +21,8 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from restaurant.views import BookingViewSet
 
-router = DefaultRouter()  
-router.register(r'bookings', BookingViewSet)
+router = DefaultRouter()
+router.register(r'tables', BookingViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
