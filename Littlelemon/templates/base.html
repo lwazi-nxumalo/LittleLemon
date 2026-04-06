@@ -13,14 +13,14 @@
       content="Based in Chicago, Illinois, Little Lemon is a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist."
     />
 
-    <!-- Load favicon -->
+    
     <link
       rel="shortcut icon"
       type="image/png"
       href="{% static 'restaurant/img/favicon.ico' %}"
     />
 
-    <!-- Include your CSS files here -->
+    
     <link
       rel="preload"
       as="style"
@@ -37,13 +37,13 @@
   </head>
 
   <body>
-    <!--Header content-->
+    
     {% include 'partials/_header.html' %}
 
     <main>{% block content %} {% endblock %}</main>
 
-    <!--Footer content-->
+    
     {% include 'partials/_footer.html' %} 
-    <!-- Replace this comment with your code  -->
+  
   </body>
 </html>

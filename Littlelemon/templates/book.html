@@ -48,10 +48,10 @@
     const dateInput = document.getElementById('reservation_date');
     dateInput.value = formattedDate;
 
-    // Initial load
+   
     getBookings();
 
-    // Reload bookings when date changes
+    // Reload bokings when date changes
     dateInput.addEventListener('change', getBookings);
 
     document.getElementById('button').addEventListener('click', function () {
@@ -74,7 +74,7 @@
         reservation_slot: slotValue,
       };
 
-      // POST to the API endpoint
+      // POST 
       fetch("/restaurant/api/bookings/", {
         method: 'POST',
         headers: {
@@ -90,7 +90,7 @@
       .then(() => {
         alert("Reservation successful!");
         document.getElementById('first_name').value = ""; 
-        getBookings(); // Refresh the list and slots
+        getBookings(); 
       })
       .catch(error => alert(error.message));
     });
@@ -100,7 +100,7 @@
       const todayElem = document.getElementById('today');
       if (todayElem) todayElem.innerHTML = dateValue;
 
-      // GET from the API endpoint with the date filter
+      
       fetch("/restaurant/api/bookings/?date=" + dateValue)
         .then(r => r.json())
         .then(data => {
@@ -108,7 +108,6 @@
           let bookingsHtml = '';
 
           data.forEach(item => {
-            // DRF returns flat JSON, so we check item.field first
             const slot = Number(item.reservation_slot || item.fields?.reservation_slot);
             const name = item.first_name || item.fields?.first_name;
 
@@ -132,7 +131,7 @@
     function renderSlotMenu(reserved_slots) {
       let slot_options = '<option value="0" disabled selected>Select time</option>';
       
-      // Generating slots from 10 AM to 8 PM (20:00)
+      
       for (let i = 10; i <= 20; i++) {
         const label = formatTime(i);
         if (reserved_slots.includes(i)) {
