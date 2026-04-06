@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics, viewsets
 from .serializers import BookingSerializer, MenuSerializer
 from .models import Booking, Menu
+from rest_framework.permissions import IsAuthenticated
 
 def bookings(request):
     return render(request, 'book.html')
@@ -27,6 +28,7 @@ class SingleMenuView(generics.RetrieveUpdateAPIView, generics.DestroyAPIView):
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         booking_date = self.request.query_params.get('date')
