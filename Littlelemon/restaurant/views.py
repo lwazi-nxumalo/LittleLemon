@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import generics, viewsets
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from .serializers import BookingSerializer, MenuSerializer
 from .models import Booking, Menu
-from rest_framework.permissions import IsAuthenticated
 
 def bookings(request):
     return render(request, 'book.html')
@@ -20,10 +20,12 @@ def menu_page(request):
 class MenuItemView(generics.ListCreateAPIView):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
-class SingleMenuView(generics.RetrieveUpdateAPIView, generics.DestroyAPIView):
+class SingleMenuView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
