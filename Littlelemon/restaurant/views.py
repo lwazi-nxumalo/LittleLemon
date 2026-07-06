@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from rest_framework import generics, viewsets
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from .serializers import BookingSerializer, MenuSerializer
@@ -16,6 +17,9 @@ def about(request):
 def menu_page(request):
     menu_items = Menu.objects.all()
     return render(request, 'menu.html', {'menu': menu_items})
+
+def health_check(request):
+    return JsonResponse({"status": "ok"})
 
 class MenuItemView(generics.ListCreateAPIView):
     queryset = Menu.objects.all()

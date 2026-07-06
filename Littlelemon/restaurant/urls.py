@@ -11,6 +11,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('menu/', views.menu_page, name='menu'),
     path('reservations/', views.bookings, name='bookings'),
+    path('health/', views.health_check, name='health'),
     path('api/', include(router.urls)),
     path('api/menu/', views.MenuItemView.as_view(), name='menu-api'),
     path('api/menu/<int:pk>/', views.SingleMenuView.as_view()),
