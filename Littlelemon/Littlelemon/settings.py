@@ -1,44 +1,42 @@
 from pathlib import Path
 import environ
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Initialize environment variables
+# Environment variables
 env = environ.Env(
     DEBUG=(bool, False),
 )
 
-# Read .env file if it exists (local dev). In production, real env vars are used instead.
-environ.Env.read_env(BASE_DIR / '.env')
+# Read .env file for local development
+environ.Env.read_env(BASE_DIR / ".env")
 
+# SECURITY
+SECRET_KEY = env("SECRET_KEY")
+DEBUG = env("DEBUG")
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
-
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
-
-
-# Application definition
-
+# Applications
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "cloudinary_storage",
     "django.contrib.staticfiles",
+
+    "cloudinary_storage",
     "cloudinary",
+
     "rest_framework",
     "rest_framework.authtoken",
     "djoser",
+
     "restaurant",
 ]
 
+# Middleware
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -55,7 +53,7 @@ ROOT_URLCONF = "Littlelemon.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates'],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -69,18 +67,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "Littlelemon.wsgi.application"
 
-
 # Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
 DATABASES = {
-    'default': env.db('DATABASE_URL', default=f'sqlite:///{BASE_DIR / "db.sqlite3"}')
+    "default": env.db(
+        "DATABASE_URL",
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+    )
 }
 
-
 # Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -96,76 +91,88 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/6.0/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
 
 USE_I18N = True
-
 USE_TZ = True
 
-WHITENOISE_MANIFEST_STRICT = False
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
-
+# Static & Media
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / 'staticfiles_build'
+STATIC_ROOT = BASE_DIR / "staticfiles_build"
 
-MEDIA_URL = '/media/'
+MEDIA_URL = "/media/"
+
+# Uncomment only if you have a /static folder
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
+# ]
 
 STORAGES = {
     "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",  
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-# Compatibility shim: django-cloudinary-storage's collectstatic override still
-# reads the old-style STATICFILES_STORAGE setting directly. Django itself
-# ignores this in favor of STORAGES above — this line exists only to stop
-# that library's check from raising AttributeError.
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-# Cloudinary Credentials Configuration
+
+# Compatibility with django-cloudinary-storage
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
+
+WHITENOISE_MANIFEST_STRICT = False
+
+# Cloudinary
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': env('CLOUDINARY_API_KEY'),
-    'API_SECRET': env('CLOUDINARY_API_SECRET'),
+    "CLOUD_NAME": env("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": env("CLOUDINARY_API_KEY"),
+    "API_SECRET": env("CLOUDINARY_API_SECRET"),
 }
 
-
-DJOSER = {
-    'USER_ID_FIELD': 'username',
-}
-
+# Django REST Framework
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ],
 }
 
+# Djoser
+DJOSER = {
+    "USER_ID_FIELD": "username",
+}
+
+# Logging
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
     },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': env('DJANGO_LOG_LEVEL', default='INFO'),
-            'propagate': False,
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": env("DJANGO_LOG_LEVEL", default="INFO"),
+            "propagate": False,
         },
     },
 }
+
+# Production settings
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+CSRF_TRUSTED_ORIGINS = env.list(
+    "CSRF_TRUSTED_ORIGINS",
+    default=[],
+)
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
