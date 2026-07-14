@@ -11,6 +11,9 @@ pillow = "*"
 djoser = "*"
 django-environ = "*"
 whitenoise = "*"
+django-cloudinary-storage = "*"
+cloudinary = "*"
+gunicorn = "*"
 
 [dev-packages]
 
