@@ -126,6 +126,11 @@ STORAGES = {
     },
 }
 
+# Compatibility shim: django-cloudinary-storage's collectstatic override still
+# reads the old-style STATICFILES_STORAGE setting directly. Django itself
+# ignores this in favor of STORAGES above — this line exists only to stop
+# that library's check from raising AttributeError.
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Cloudinary Credentials Configuration
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
