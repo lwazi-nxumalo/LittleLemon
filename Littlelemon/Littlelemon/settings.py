@@ -119,13 +119,12 @@ MEDIA_URL = '/media/'
 
 STORAGES = {
     "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",  
     },
 }
-
 # Compatibility shim: django-cloudinary-storage's collectstatic override still
 # reads the old-style STATICFILES_STORAGE setting directly. Django itself
 # ignores this in favor of STORAGES above — this line exists only to stop
